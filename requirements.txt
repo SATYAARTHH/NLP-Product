@@ -1,3 +1,5 @@
-# Only needed for the Synthea+Faker corpus and real-scan OCR set; M1/M2 core is stdlib-only.
+# M2 data generation plus the M3/M4 baseline modeling pipeline.
 faker==40.43.0
 pillow==13.0.0
+joblib==1.6.0
+scikit-learn==1.9.1

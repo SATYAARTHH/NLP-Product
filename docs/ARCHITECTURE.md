@@ -1,6 +1,6 @@
 # TriageGuard architecture
 
-This document describes how TriageGuard is put together: the runtime system we are building (M3-M5) and the data pipeline that already exists (M2). It says what is built today and what is still planned. For the history of decisions and what was redone, see [PLAN.md](PLAN.md).
+This document describes how TriageGuard is put together: the modeled runtime stages built in M3-M4, the service planned for M5, and the data pipeline built in M2. For the history of decisions and what was redone, see [PLAN.md](PLAN.md).
 
 ## 1. What the system does
 
@@ -17,7 +17,7 @@ output: {
 }
 ```
 
-## 2. Runtime architecture (M3-M5, planned)
+## 2. Runtime architecture (M3-M4 modeled; M5 service planned)
 
 ```mermaid
 flowchart TD
@@ -46,11 +46,11 @@ flowchart TD
 |---|---|---|---|---|
 | Intake adapter | Turn any input into plain text | Read text or PDF text layer | Tesseract OCR for images | OCR path exists as a test-set script (`scripts/make_scans.py`) |
 | Cleaning | Normalise characters without changing offsets | `triageguard/data/clean.py` | | Yes |
-| PII redaction | Find and mask Tier 1 identifiers | Regex + word lists (Presidio-style) | Token-level NER (BERT-style) | M3 |
-| Document type | Classify into 6 types with probability | TF-IDF + logistic regression | Small fine-tuned encoder | M3 |
-| Field extraction | Pull type-specific fields | Rules and patterns per layout family | Token tagger trained on field spans | M3 |
-| Routing | routine / high_value / suspicious | Rules over extracted fields | Classifier over fields + text | M3 |
-| Confidence gate | Send unsure cases to humans | Fixed thresholds | Thresholds chosen on val, calibrated (ECE at most 0.05) | M4 |
+| PII redaction | Find and mask Tier 1 identifiers | Context and format rules | Token-level NER remains an OCR-hardening option | Yes, baseline |
+| Document type | Classify into 6 types with probability | TF-IDF + logistic regression | Character features evaluated; word model selected on validation | Yes |
+| Field extraction | Pull type-specific fields | Anchors + training-only value lexicon | Token tagger remains an OCR-hardening option | Yes, baseline |
+| Routing | routine / high_value / suspicious | Rules over extracted fields | Hybrid visible-fact rules + TF-IDF classifier | Yes |
+| Confidence gate | Send unsure cases to humans | Validation-selected joint-confidence threshold | Temperature-scaled probabilities, ECE with 15 bins | Yes |
 | Service | API around the pipeline | FastAPI + Docker, `/triage`, `/health` | | M5 |
 | Model registry | Versioned models, champion/challenger | MLflow (planned in M1) | | M5 |
 | Monitoring | Quality and drift without raw PII | Structured logs of safe outputs | Dashboards, override rate | M5 |
@@ -135,9 +135,16 @@ triageguard/
     clean.py             offset-preserving cleaning (also used at runtime)
     validate.py          integrity and leakage checks
     generate.py          corpus assembly, splits, manifests (both sources)
-  (M3+) redaction/, classify/, extract/, route/, gate/, api/
+  modeling/
+    redaction.py         high-recall direct-identifier rules
+    fields.py            anchor and training-lexicon extraction
+    classifiers.py       TF-IDF models and temperature scaling
+    routing.py           visible-fact rules and hybrid routing
+    metrics.py           fixed PII, field, classification, ECE and gate metrics
+  (M5+) api/
 scripts/
-  generate_corpus.py, generate_synthea_corpus.py, make_scans.py, eda.py, compare_realism.py
+  generate_corpus.py, generate_synthea_corpus.py, make_scans.py, eda.py, compare_realism.py,
+  train_evaluate.py
 tests/                   unit tests (python3 -m unittest)
 docs/                    M1 PDF, ARCHITECTURE, PLAN, data card, EDA, privacy, realism, decision log
 reports/                 machine-readable statistics
@@ -152,4 +159,5 @@ tools/                   (git-ignored) Synthea jar and raw output
 | `.venv` with Faker, Pillow (`requirements.txt`) | Synthea + Faker corpus, scan rendering, realism report | project venv |
 | Java 17+ and the Synthea jar | Re-running Synthea | `tools/synthea/` |
 | Tesseract 5 | Real OCR sets, later the intake adapter | Homebrew |
-| (M3) scikit-learn, PyTorch, Transformers, MLflow | Models and experiment tracking | project venv, GPU via Colab/Kaggle if needed |
+| Python 3.13 venv, scikit-learn 1.9 | Current CPU baselines and evaluation | `.venv`, locked in `requirements-lock.txt` |
+| PyTorch/Transformers | Optional token models if OCR robustness work continues | Not required by the selected baseline |

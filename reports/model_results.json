@@ -1,0 +1,1325 @@
+{
+  "run": {
+    "python": "3.13.18",
+    "sklearn": "1.9.1",
+    "platform": "macOS-27.2.1-arm64-arm-64bit-Mach-O"
+  },
+  "data": {
+    "corpus_version": "m2-synthea-v2",
+    "control_corpus_version": "m2-v1",
+    "train_documents": 3940,
+    "validation_documents": 586,
+    "file_sha256": {
+      "train": "9cf6385c6187e631fc9331c6e3ab66f8e0621a8f0d6fe1e21397b32f2b66f421",
+      "val": "8787eefaa71b28fe18c0452e5ab6880e9cdc366b5a6fe0316c549dcaeaa3cdbc",
+      "test_golden": "509cb507acc8ea5ed02c08c686ec4479e9ffb8e3acc55895c7e2c7deefec71a1",
+      "test_hard": "cfeca102199649a7df9052a02200911e8fd6dd418d4fc7c73528af49b9b00701",
+      "real_ocr": "ce411db9e8280e517f78902abb075b58aec3954fccd9f20f187801531dd6e7a0"
+    },
+    "control_file_sha256": {
+      "test_golden": "2f6ff05ca0ed8b7cd412f3448fded3baa349db52b6a10ac0affcd133fecf7c0e",
+      "test_hard": "fcfabb12ba7dfc175211829f647f38c4e5fbc43c780c34744d602925e6214550",
+      "real_ocr": "84d0c39cbe1bbfaf6208c7dbf397ad7fe22a03d6b717dfba8eb5b1b760939e88"
+    }
+  },
+  "experiments": {
+    "document_type": {
+      "validation_macro_f1": {
+        "word_tfidf": 1.0,
+        "word_char_tfidf": 1.0
+      },
+      "selected": "word_tfidf",
+      "temperature": 0.5
+    },
+    "routing": {
+      "validation_macro_f1": {
+        "word_tfidf": 0.7202,
+        "word_char_tfidf": 0.732,
+        "visible_fact_rules": 0.9278,
+        "hybrid_rules_text": 0.9375
+      },
+      "selected": "hybrid_rules_text",
+      "temperature": 0.95
+    }
+  },
+  "validation": {
+    "document_type": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "ece_15": 0.0001,
+      "per_class": {
+        "claim_form": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "recall_ci95": [
+            0.9745,
+            1.0
+          ],
+          "support": 147
+        },
+        "discharge_summary": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "recall_ci95": [
+            0.9162,
+            1.0
+          ],
+          "support": 42
+        },
+        "hospital_bill": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "recall_ci95": [
+            0.9745,
+            1.0
+          ],
+          "support": 147
+        },
+        "lab_report": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "recall_ci95": [
+            0.9619,
+            1.0
+          ],
+          "support": 97
+        },
+        "preauth_letter": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "recall_ci95": [
+            0.9458,
+            1.0
+          ],
+          "support": 67
+        },
+        "prescription": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "recall_ci95": [
+            0.9572,
+            1.0
+          ],
+          "support": 86
+        }
+      }
+    },
+    "routing": {
+      "accuracy": 0.9454,
+      "macro_f1": 0.9375,
+      "ece_15": 0.0383,
+      "per_class": {
+        "high_value": {
+          "precision": 0.9831,
+          "recall": 0.9667,
+          "f1-score": 0.9748,
+          "recall_ci95": [
+            0.8864,
+            0.9908
+          ],
+          "support": 60
+        },
+        "routine": {
+          "precision": 0.9821,
+          "recall": 0.9459,
+          "f1-score": 0.9637,
+          "recall_ci95": [
+            0.9195,
+            0.964
+          ],
+          "support": 407
+        },
+        "suspicious": {
+          "precision": 0.8222,
+          "recall": 0.9328,
+          "f1-score": 0.874,
+          "recall_ci95": [
+            0.8729,
+            0.9655
+          ],
+          "support": 119
+        }
+      }
+    },
+    "gate": {
+      "threshold": 0.615,
+      "coverage": 0.8072,
+      "accuracy": 0.9852
+    }
+  },
+  "evaluation": {
+    "test_golden": {
+      "pii": {
+        "leak_recall": 0.9841,
+        "exact_recall": 0.8813,
+        "exact_precision": 0.7873,
+        "entities": 3386,
+        "per_label": {
+          "ACCOUNT_NUMBER": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 166
+          },
+          "ADDRESS": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 328
+          },
+          "DATE_OF_BIRTH": {
+            "leak_recall": 0.998,
+            "exact_recall": 0.998,
+            "support": 504
+          },
+          "EMAIL": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 152
+          },
+          "MEMBER_ID": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 504
+          },
+          "MRN": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 186
+          },
+          "NAME": {
+            "leak_recall": 0.9415,
+            "exact_recall": 0.5574,
+            "support": 906
+          },
+          "PHONE": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 431
+          },
+          "SSN": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 209
+          }
+        }
+      },
+      "document_type": {
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "ece_15": 0.0002,
+        "per_class": {
+          "claim_form": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9704,
+              1.0
+            ],
+            "support": 126
+          },
+          "discharge_summary": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9244,
+              1.0
+            ],
+            "support": 47
+          },
+          "hospital_bill": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9704,
+              1.0
+            ],
+            "support": 126
+          },
+          "lab_report": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9568,
+              1.0
+            ],
+            "support": 85
+          },
+          "preauth_letter": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9324,
+              1.0
+            ],
+            "support": 53
+          },
+          "prescription": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9458,
+              1.0
+            ],
+            "support": 67
+          }
+        }
+      },
+      "fields": {
+        "precision": 0.9924,
+        "recall": 0.9455,
+        "f1": 0.9684,
+        "per_doc_type": {
+          "claim_form": {
+            "precision": 1.0,
+            "recall": 0.969,
+            "f1": 0.9843
+          },
+          "discharge_summary": {
+            "precision": 0.9934,
+            "recall": 0.9836,
+            "f1": 0.9884
+          },
+          "hospital_bill": {
+            "precision": 1.0,
+            "recall": 0.8744,
+            "f1": 0.933
+          },
+          "lab_report": {
+            "precision": 0.9929,
+            "recall": 0.9894,
+            "f1": 0.9912
+          },
+          "preauth_letter": {
+            "precision": 1.0,
+            "recall": 0.9811,
+            "f1": 0.9905
+          },
+          "prescription": {
+            "precision": 0.9425,
+            "recall": 0.9462,
+            "f1": 0.9443
+          }
+        }
+      },
+      "routing": {
+        "accuracy": 0.9484,
+        "macro_f1": 0.9436,
+        "ece_15": 0.0396,
+        "per_class": {
+          "high_value": {
+            "precision": 1.0,
+            "recall": 0.9744,
+            "f1-score": 0.987,
+            "recall_ci95": [
+              0.8682,
+              0.9955
+            ],
+            "support": 39
+          },
+          "routine": {
+            "precision": 0.983,
+            "recall": 0.9479,
+            "f1-score": 0.9651,
+            "recall_ci95": [
+              0.9201,
+              0.9664
+            ],
+            "support": 365
+          },
+          "suspicious": {
+            "precision": 0.8246,
+            "recall": 0.94,
+            "f1-score": 0.8785,
+            "recall_ci95": [
+              0.8752,
+              0.9722
+            ],
+            "support": 100
+          }
+        }
+      },
+      "gate": {
+        "coverage": 0.8115,
+        "joint_accuracy": 0.9853,
+        "accepted": 409,
+        "total": 504
+      }
+    },
+    "test_hard": {
+      "pii": {
+        "leak_recall": 0.8544,
+        "exact_recall": 0.8138,
+        "exact_precision": 0.7973,
+        "entities": 3442,
+        "per_label": {
+          "ACCOUNT_NUMBER": {
+            "leak_recall": 0.8736,
+            "exact_recall": 0.8736,
+            "support": 87
+          },
+          "ADDRESS": {
+            "leak_recall": 0.9045,
+            "exact_recall": 0.8854,
+            "support": 157
+          },
+          "DATE_OF_BIRTH": {
+            "leak_recall": 0.861,
+            "exact_recall": 0.861,
+            "support": 561
+          },
+          "EMAIL": {
+            "leak_recall": 0.9381,
+            "exact_recall": 0.9381,
+            "support": 97
+          },
+          "MEMBER_ID": {
+            "leak_recall": 0.9247,
+            "exact_recall": 0.9247,
+            "support": 279
+          },
+          "MRN": {
+            "leak_recall": 0.891,
+            "exact_recall": 0.891,
+            "support": 413
+          },
+          "NAME": {
+            "leak_recall": 0.7615,
+            "exact_recall": 0.6144,
+            "support": 931
+          },
+          "PHONE": {
+            "leak_recall": 0.8623,
+            "exact_recall": 0.8623,
+            "support": 530
+          },
+          "SSN": {
+            "leak_recall": 0.9225,
+            "exact_recall": 0.9225,
+            "support": 387
+          }
+        }
+      },
+      "document_type": {
+        "accuracy": 0.9911,
+        "macro_f1": 0.9904,
+        "ece_15": 0.0109,
+        "per_class": {
+          "claim_form": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.974,
+              1.0
+            ],
+            "support": 144
+          },
+          "discharge_summary": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9082,
+              1.0
+            ],
+            "support": 38
+          },
+          "hospital_bill": {
+            "precision": 0.9664,
+            "recall": 1.0,
+            "f1-score": 0.9829,
+            "recall_ci95": [
+              0.974,
+              1.0
+            ],
+            "support": 144
+          },
+          "lab_report": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9577,
+              1.0
+            ],
+            "support": 87
+          },
+          "preauth_letter": {
+            "precision": 1.0,
+            "recall": 0.9219,
+            "f1-score": 0.9593,
+            "recall_ci95": [
+              0.8298,
+              0.9662
+            ],
+            "support": 64
+          },
+          "prescription": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9563,
+              1.0
+            ],
+            "support": 84
+          }
+        }
+      },
+      "fields": {
+        "precision": 0.9427,
+        "recall": 0.6909,
+        "f1": 0.7974,
+        "per_doc_type": {
+          "claim_form": {
+            "precision": 0.9912,
+            "recall": 0.7724,
+            "f1": 0.8682
+          },
+          "discharge_summary": {
+            "precision": 0.899,
+            "recall": 0.7542,
+            "f1": 0.8203
+          },
+          "hospital_bill": {
+            "precision": 0.9618,
+            "recall": 0.677,
+            "f1": 0.7947
+          },
+          "lab_report": {
+            "precision": 0.8587,
+            "recall": 0.5345,
+            "f1": 0.6589
+          },
+          "preauth_letter": {
+            "precision": 0.9781,
+            "recall": 0.6979,
+            "f1": 0.8146
+          },
+          "prescription": {
+            "precision": 0.8952,
+            "recall": 0.7475,
+            "f1": 0.8147
+          }
+        }
+      },
+      "routing": {
+        "accuracy": 0.8752,
+        "macro_f1": 0.837,
+        "ece_15": 0.0465,
+        "per_class": {
+          "high_value": {
+            "precision": 0.9375,
+            "recall": 0.6977,
+            "f1-score": 0.8,
+            "recall_ci95": [
+              0.5489,
+              0.814
+            ],
+            "support": 43
+          },
+          "routine": {
+            "precision": 0.9348,
+            "recall": 0.8912,
+            "f1-score": 0.9125,
+            "recall_ci95": [
+              0.8562,
+              0.9185
+            ],
+            "support": 386
+          },
+          "suspicious": {
+            "precision": 0.7267,
+            "recall": 0.8864,
+            "f1-score": 0.7986,
+            "recall_ci95": [
+              0.821,
+              0.9299
+            ],
+            "support": 132
+          }
+        }
+      },
+      "gate": {
+        "coverage": 0.7504,
+        "joint_accuracy": 0.9454,
+        "accepted": 421,
+        "total": 561
+      }
+    },
+    "real_ocr": {
+      "pii": {
+        "surviving_string_recall": 0.9259,
+        "surviving_entities": 864,
+        "note": "Only identifiers still present verbatim after Tesseract are scorable without aligned spans."
+      },
+      "document_type": {
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "ece_15": 0.0003,
+        "per_class": {
+          "claim_form": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9103,
+              1.0
+            ],
+            "support": 39
+          },
+          "discharge_summary": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.7961,
+              1.0
+            ],
+            "support": 15
+          },
+          "hospital_bill": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9059,
+              1.0
+            ],
+            "support": 37
+          },
+          "lab_report": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.8754,
+              1.0
+            ],
+            "support": 27
+          },
+          "preauth_letter": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.7412,
+              1.0
+            ],
+            "support": 11
+          },
+          "prescription": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.8454,
+              1.0
+            ],
+            "support": 21
+          }
+        }
+      },
+      "fields": {
+        "precision": 0.965,
+        "recall": 0.6655,
+        "f1": 0.7878,
+        "per_doc_type": {
+          "claim_form": {
+            "precision": 0.9944,
+            "recall": 0.7574,
+            "f1": 0.8599
+          },
+          "discharge_summary": {
+            "precision": 0.9589,
+            "recall": 0.7292,
+            "f1": 0.8284
+          },
+          "hospital_bill": {
+            "precision": 0.9888,
+            "recall": 0.7137,
+            "f1": 0.829
+          },
+          "lab_report": {
+            "precision": 0.9259,
+            "recall": 0.4286,
+            "f1": 0.5859
+          },
+          "preauth_letter": {
+            "precision": 0.8333,
+            "recall": 0.4545,
+            "f1": 0.5882
+          },
+          "prescription": {
+            "precision": 0.9143,
+            "recall": 0.7711,
+            "f1": 0.8366
+          }
+        }
+      },
+      "routing": {
+        "accuracy": 0.9067,
+        "macro_f1": 0.8823,
+        "ece_15": 0.0612,
+        "per_class": {
+          "high_value": {
+            "precision": 1.0,
+            "recall": 0.8,
+            "f1-score": 0.8889,
+            "recall_ci95": [
+              0.4902,
+              0.9433
+            ],
+            "support": 10
+          },
+          "routine": {
+            "precision": 0.9259,
+            "recall": 0.9434,
+            "f1-score": 0.9346,
+            "recall_ci95": [
+              0.882,
+              0.9738
+            ],
+            "support": 106
+          },
+          "suspicious": {
+            "precision": 0.8235,
+            "recall": 0.8235,
+            "f1-score": 0.8235,
+            "recall_ci95": [
+              0.6649,
+              0.9165
+            ],
+            "support": 34
+          }
+        }
+      },
+      "gate": {
+        "coverage": 0.8267,
+        "joint_accuracy": 0.9435,
+        "accepted": 124,
+        "total": 150
+      }
+    },
+    "control_test_golden": {
+      "pii": {
+        "leak_recall": 0.9832,
+        "exact_recall": 0.8831,
+        "exact_precision": 0.8049,
+        "entities": 4652,
+        "per_label": {
+          "ACCOUNT_NUMBER": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 217
+          },
+          "ADDRESS": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 451
+          },
+          "DATE_OF_BIRTH": {
+            "leak_recall": 0.9971,
+            "exact_recall": 0.9971,
+            "support": 682
+          },
+          "EMAIL": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 208
+          },
+          "MEMBER_ID": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 682
+          },
+          "MRN": {
+            "leak_recall": 0.996,
+            "exact_recall": 0.996,
+            "support": 252
+          },
+          "NAME": {
+            "leak_recall": 0.94,
+            "exact_recall": 0.5675,
+            "support": 1251
+          },
+          "PHONE": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 619
+          },
+          "SSN": {
+            "leak_recall": 1.0,
+            "exact_recall": 1.0,
+            "support": 290
+          }
+        }
+      },
+      "document_type": {
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "ece_15": 0.0046,
+        "per_class": {
+          "claim_form": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.976,
+              1.0
+            ],
+            "support": 156
+          },
+          "discharge_summary": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.948,
+              1.0
+            ],
+            "support": 70
+          },
+          "hospital_bill": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.976,
+              1.0
+            ],
+            "support": 156
+          },
+          "lab_report": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9695,
+              1.0
+            ],
+            "support": 122
+          },
+          "preauth_letter": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9408,
+              1.0
+            ],
+            "support": 61
+          },
+          "prescription": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9682,
+              1.0
+            ],
+            "support": 117
+          }
+        }
+      },
+      "fields": {
+        "precision": 0.9936,
+        "recall": 0.4028,
+        "f1": 0.5732,
+        "per_doc_type": {
+          "claim_form": {
+            "precision": 0.9874,
+            "recall": 0.3622,
+            "f1": 0.53
+          },
+          "discharge_summary": {
+            "precision": 0.9781,
+            "recall": 0.3418,
+            "f1": 0.5066
+          },
+          "hospital_bill": {
+            "precision": 1.0,
+            "recall": 0.6374,
+            "f1": 0.7785
+          },
+          "lab_report": {
+            "precision": 1.0,
+            "recall": 0.1981,
+            "f1": 0.3306
+          },
+          "preauth_letter": {
+            "precision": 0.9688,
+            "recall": 0.3388,
+            "f1": 0.502
+          },
+          "prescription": {
+            "precision": 1.0,
+            "recall": 0.3246,
+            "f1": 0.4901
+          }
+        }
+      },
+      "routing": {
+        "accuracy": 0.8842,
+        "macro_f1": 0.7549,
+        "ece_15": 0.0469,
+        "per_class": {
+          "high_value": {
+            "precision": 0.7732,
+            "recall": 0.7732,
+            "f1-score": 0.7732,
+            "recall_ci95": [
+              0.6804,
+              0.8452
+            ],
+            "support": 97
+          },
+          "routine": {
+            "precision": 0.9515,
+            "recall": 0.9533,
+            "f1-score": 0.9524,
+            "recall_ci95": [
+              0.9315,
+              0.9684
+            ],
+            "support": 514
+          },
+          "suspicious": {
+            "precision": 0.5429,
+            "recall": 0.5352,
+            "f1-score": 0.539,
+            "recall_ci95": [
+              0.4204,
+              0.6464
+            ],
+            "support": 71
+          }
+        }
+      },
+      "gate": {
+        "coverage": 0.7625,
+        "joint_accuracy": 0.95,
+        "accepted": 520,
+        "total": 682
+      }
+    },
+    "control_test_hard": {
+      "pii": {
+        "leak_recall": 0.8331,
+        "exact_recall": 0.7859,
+        "exact_precision": 0.8069,
+        "entities": 4536,
+        "per_label": {
+          "ACCOUNT_NUMBER": {
+            "leak_recall": 0.8702,
+            "exact_recall": 0.8702,
+            "support": 131
+          },
+          "ADDRESS": {
+            "leak_recall": 0.9052,
+            "exact_recall": 0.875,
+            "support": 232
+          },
+          "DATE_OF_BIRTH": {
+            "leak_recall": 0.8421,
+            "exact_recall": 0.8421,
+            "support": 722
+          },
+          "EMAIL": {
+            "leak_recall": 0.8636,
+            "exact_recall": 0.8636,
+            "support": 110
+          },
+          "MEMBER_ID": {
+            "leak_recall": 0.8976,
+            "exact_recall": 0.8976,
+            "support": 381
+          },
+          "MRN": {
+            "leak_recall": 0.8784,
+            "exact_recall": 0.8784,
+            "support": 485
+          },
+          "NAME": {
+            "leak_recall": 0.7369,
+            "exact_recall": 0.5772,
+            "support": 1296
+          },
+          "PHONE": {
+            "leak_recall": 0.8565,
+            "exact_recall": 0.8565,
+            "support": 690
+          },
+          "SSN": {
+            "leak_recall": 0.8957,
+            "exact_recall": 0.8957,
+            "support": 489
+          }
+        }
+      },
+      "document_type": {
+        "accuracy": 0.9986,
+        "macro_f1": 0.9982,
+        "ece_15": 0.0245,
+        "per_class": {
+          "claim_form": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9771,
+              1.0
+            ],
+            "support": 164
+          },
+          "discharge_summary": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9547,
+              1.0
+            ],
+            "support": 81
+          },
+          "hospital_bill": {
+            "precision": 0.9939,
+            "recall": 1.0,
+            "f1-score": 0.997,
+            "recall_ci95": [
+              0.9771,
+              1.0
+            ],
+            "support": 164
+          },
+          "lab_report": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9713,
+              1.0
+            ],
+            "support": 130
+          },
+          "preauth_letter": {
+            "precision": 1.0,
+            "recall": 0.9848,
+            "f1-score": 0.9924,
+            "recall_ci95": [
+              0.919,
+              0.9973
+            ],
+            "support": 66
+          },
+          "prescription": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9682,
+              1.0
+            ],
+            "support": 117
+          }
+        }
+      },
+      "fields": {
+        "precision": 0.9128,
+        "recall": 0.3108,
+        "f1": 0.4637,
+        "per_doc_type": {
+          "claim_form": {
+            "precision": 0.9179,
+            "recall": 0.2691,
+            "f1": 0.4162
+          },
+          "discharge_summary": {
+            "precision": 0.6099,
+            "recall": 0.1874,
+            "f1": 0.2867
+          },
+          "hospital_bill": {
+            "precision": 0.9668,
+            "recall": 0.5301,
+            "f1": 0.6848
+          },
+          "lab_report": {
+            "precision": 0.9889,
+            "recall": 0.1359,
+            "f1": 0.2389
+          },
+          "preauth_letter": {
+            "precision": 0.8929,
+            "recall": 0.2525,
+            "f1": 0.3937
+          },
+          "prescription": {
+            "precision": 0.9474,
+            "recall": 0.2917,
+            "f1": 0.446
+          }
+        }
+      },
+      "routing": {
+        "accuracy": 0.7936,
+        "macro_f1": 0.6306,
+        "ece_15": 0.0884,
+        "per_class": {
+          "high_value": {
+            "precision": 0.8817,
+            "recall": 0.5816,
+            "f1-score": 0.7009,
+            "recall_ci95": [
+              0.499,
+              0.6598
+            ],
+            "support": 141
+          },
+          "routine": {
+            "precision": 0.8699,
+            "recall": 0.8948,
+            "f1-score": 0.8822,
+            "recall_ci95": [
+              0.8656,
+              0.9183
+            ],
+            "support": 523
+          },
+          "suspicious": {
+            "precision": 0.2527,
+            "recall": 0.3966,
+            "f1-score": 0.3087,
+            "recall_ci95": [
+              0.2809,
+              0.5251
+            ],
+            "support": 58
+          }
+        }
+      },
+      "gate": {
+        "coverage": 0.6981,
+        "joint_accuracy": 0.9325,
+        "accepted": 504,
+        "total": 722
+      }
+    },
+    "control_real_ocr": {
+      "pii": {
+        "surviving_string_recall": 0.9245,
+        "surviving_entities": 887,
+        "note": "Only identifiers still present verbatim after Tesseract are scorable without aligned spans."
+      },
+      "document_type": {
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "ece_15": 0.0041,
+        "per_class": {
+          "claim_form": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9059,
+              1.0
+            ],
+            "support": 37
+          },
+          "discharge_summary": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.7961,
+              1.0
+            ],
+            "support": 15
+          },
+          "hospital_bill": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.862,
+              1.0
+            ],
+            "support": 24
+          },
+          "lab_report": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.8668,
+              1.0
+            ],
+            "support": 25
+          },
+          "preauth_letter": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.7847,
+              1.0
+            ],
+            "support": 14
+          },
+          "prescription": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "recall_ci95": [
+              0.9011,
+              1.0
+            ],
+            "support": 35
+          }
+        }
+      },
+      "fields": {
+        "precision": 0.9675,
+        "recall": 0.319,
+        "f1": 0.4798,
+        "per_doc_type": {
+          "claim_form": {
+            "precision": 0.9508,
+            "recall": 0.2788,
+            "f1": 0.4312
+          },
+          "discharge_summary": {
+            "precision": 0.9259,
+            "recall": 0.3049,
+            "f1": 0.4587
+          },
+          "hospital_bill": {
+            "precision": 0.9891,
+            "recall": 0.5723,
+            "f1": 0.7251
+          },
+          "lab_report": {
+            "precision": 1.0,
+            "recall": 0.1473,
+            "f1": 0.2568
+          },
+          "preauth_letter": {
+            "precision": 0.9091,
+            "recall": 0.2381,
+            "f1": 0.3774
+          },
+          "prescription": {
+            "precision": 0.9722,
+            "recall": 0.2778,
+            "f1": 0.4321
+          }
+        }
+      },
+      "routing": {
+        "accuracy": 0.86,
+        "macro_f1": 0.6158,
+        "ece_15": 0.0781,
+        "per_class": {
+          "high_value": {
+            "precision": 0.5385,
+            "recall": 0.4667,
+            "f1-score": 0.5,
+            "recall_ci95": [
+              0.2481,
+              0.6988
+            ],
+            "support": 15
+          },
+          "routine": {
+            "precision": 0.9213,
+            "recall": 0.975,
+            "f1-score": 0.9474,
+            "recall_ci95": [
+              0.9291,
+              0.9915
+            ],
+            "support": 120
+          },
+          "suspicious": {
+            "precision": 0.5,
+            "recall": 0.3333,
+            "f1-score": 0.4,
+            "recall_ci95": [
+              0.1518,
+              0.5829
+            ],
+            "support": 15
+          }
+        }
+      },
+      "gate": {
+        "coverage": 0.8,
+        "joint_accuracy": 0.9083,
+        "accepted": 120,
+        "total": 150
+      }
+    }
+  },
+  "latency": {
+    "p50_ms": 1.94,
+    "p95_ms": 2.74
+  },
+  "target_status": {
+    "PII leak recall": {
+      "target": ">= 0.97",
+      "observed": 0.9841,
+      "pass": true
+    },
+    "Document macro-F1": {
+      "target": ">= 0.95",
+      "observed": 1.0,
+      "pass": true
+    },
+    "Field F1": {
+      "target": ">= 0.90",
+      "observed": 0.9684,
+      "pass": true
+    },
+    "High-value route recall": {
+      "target": ">= 0.90",
+      "observed": 0.9744,
+      "pass": true
+    },
+    "Suspicious route recall": {
+      "target": ">= 0.90",
+      "observed": 0.94,
+      "pass": true
+    },
+    "Document ECE": {
+      "target": "<= 0.05",
+      "observed": 0.0002,
+      "pass": true
+    },
+    "Routing ECE": {
+      "target": "<= 0.05",
+      "observed": 0.0396,
+      "pass": true
+    },
+    "p95 CPU latency": {
+      "target": "< 2000 ms",
+      "observed": 2.74,
+      "pass": true
+    },
+    "Auto-triage coverage": {
+      "target": ">= 0.70",
+      "observed": 0.8115,
+      "pass": true
+    }
+  }
+}

@@ -20,9 +20,9 @@ The full problem definition and business case is in [docs/M1_Problem_Definition_
 |---|---|---|
 | M1 Problem definition | Problem brief, users, KPIs, feasibility, repository | Done. Gaps found in review are settled in [decision_log.md](docs/decision_log.md) |
 | M2 Data preparation | Synthetic corpora, data card, EDA, cleaning, splits, privacy notes, realism comparison | Done. Main dataset is Synthea + Faker v2 |
-| M3 Baselines and models | Rule and TF-IDF baselines, fine-tuned candidates, experiment log | Next ([open items](docs/PLAN.md#before-m3-open-items)) |
-| M4 Evaluation | Error analysis, OCR robustness, threshold choice | Planned |
-| M5 Deployment prototype | FastAPI service, Docker, monitoring, fallbacks | Planned |
+| M3 Baselines and models | PII/field rules, TF-IDF models, hybrid routing, saved model bundle | Done; reproducible training in `scripts/train_evaluate.py` |
+| M4 Evaluation | Golden/hard/OCR/control evaluation, calibration and confidence gate | Done for the baseline; robustness gaps are recorded in `docs/model_evaluation.md` |
+| M5 Deployment prototype | FastAPI service, Docker, monitoring, fallbacks | Next |
 | M6 Final delivery | Report, live demo, presentation | Planned |
 
 ## The corpora (M2)
@@ -75,11 +75,22 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python scripts/compare_realism.py
 ```
 
+Model training and evaluation use an isolated Python 3.13 environment:
+
+```bash
+uv venv --python 3.13 .venv
+uv pip install --python .venv/bin/python -r requirements-lock.txt
+.venv/bin/python scripts/train_evaluate.py
+```
+
+The run writes the saved model bundle under `artifacts/models/`, detailed machine-readable scores to `reports/model_results.json`, and the readable outcome report to `docs/model_evaluation.md`.
+
 ## Repository layout
 
 ```
 triageguard/
   schema.py            label sets shared by every stage (PII labels, types, fields, routes)
+  modeling/            redaction, field extraction, classifiers, routing and metrics
   data/
     vocab.py           names, places, diagnoses, procedures, labs, medicines
     patients.py        synthetic patients and care episodes, injected warning signs
@@ -91,7 +102,7 @@ triageguard/
     validate.py        integrity and leakage checks (generation fails on any error)
     synthea_source.py  episodes from Synthea CSV output, identifiers from Faker
     generate.py        corpus assembly and patient-level splits
-scripts/               generate_corpus.py, generate_synthea_corpus.py, eda.py, make_scans.py, compare_realism.py
+scripts/               data scripts plus train_evaluate.py
 data/corpus/           in-house corpus: train / val / test_golden / test_hard JSONL, manifest, real_ocr.jsonl
 data/corpus_synthea/   Synthea + Faker corpus, same layout, plus the Synthea run metadata
 docs/                  M1 PDF, data card, EDA, privacy notes, decision log

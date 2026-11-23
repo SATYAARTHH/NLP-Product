@@ -10,9 +10,9 @@ This is the running record of the project: what each phase is for, what was done
 |---|---|---|
 | M1 Problem definition | Problem, users, KPIs, feasibility, repo | Done (2026-10-17), with review fixes |
 | M2 Data preparation | Corpus, data card, EDA, splits, privacy notes | Done; main dataset is Synthea + Faker v2 (rebalanced 2026-10-18) |
-| M3 Baselines and models | Baselines for every stage, stronger candidates, experiment log | Next: evaluation harness, then baselines |
-| M4 Evaluation and optimisation | Error analysis, OCR robustness, thresholds, calibration | Planned |
-| M5 Deployment prototype | FastAPI + Docker, monitoring, fallbacks | Planned |
+| M3 Baselines and models | Baselines for every stage, candidates and reproducible experiment log | Done (2026-11-23) |
+| M4 Evaluation and optimisation | Frozen tests, OCR/control robustness, thresholds and calibration | Done for baseline (2026-11-23); robustness findings recorded |
+| M5 Deployment prototype | FastAPI + Docker, monitoring, fallbacks | Next |
 | M6 Final delivery | Report, live demo, presentation, viva | Planned |
 
 ## M1: Problem definition
@@ -99,13 +99,13 @@ This is the running record of the project: what each phase is for, what was done
 | 1 | ~~Rebalance the Synthea corpus~~ | Done (step 6) | |
 | 2 | ~~Pin the Synthea run~~ | Done (step 6) | |
 | 3 | ~~Freeze the test sets~~ | Done (step 7) | |
-| 4 | Write the evaluation harness before any model | Metrics are defined once, as settled in M1 review | No |
-| 5 | Install M3 libraries in `.venv` (scikit-learn first; PyTorch, Transformers, MLflow for fine-tuning) | PyTorch support for Python 3.14 needs checking; fall back to 3.12 if missing | Yes (installs) |
-| 6 | GPU for fine-tuning: Lightning AI over SSH | The owner has Lightning credits. They run Lightning's SSH setup on the Mac themselves and share only the host name, never a key. Baselines run locally on CPU. | Owner sets up SSH |
-| 7 | Small real-text sanity check (M1 section 8.5) | Shows how far synthetic scores are from reality | Later (M4) |
+| 4 | ~~Write the evaluation harness before any model~~ | Done in `triageguard/modeling/metrics.py`; definitions match the M1 decisions | |
+| 5 | ~~Create an isolated modeling environment~~ | Done with Python 3.13, scikit-learn 1.9.1 and `requirements-lock.txt` | |
+| 6 | GPU fine-tuning | Deferred because the selected CPU models meet every golden-set target; reconsider for OCR/hard-set robustness | Owner only if resumed |
+| 7 | Small real-text sanity check (M1 section 8.5) | Still open before production; requires an authorized, de-identified insurer sample | Owner/data access |
 | 8 | Fill in the name on the M1 PDF | Submission | Owner |
 
-## M3: Baselines and models (planned)
+## M3: Baselines and models (done 2026-11-23)
 
 Order of work: evaluation harness, then rule and TF-IDF baselines for every stage, then stronger models that must beat their baselines on the golden set.
 
@@ -116,11 +116,18 @@ Order of work: evaluation harness, then rule and TF-IDF baselines for every stag
 | Field extraction | Rules per layout family | Token tagger on field spans | Field-level F1 |
 | Routing | Rules over extracted fields | Gradient-boosted or linear model over fields + text | Recall on high_value and suspicious |
 
-Every model is trained on Synthea + Faker train data and scored on golden, hard and real OCR for both corpora (cross-source transfer). Experiments are logged with data version, parameters and scores.
+Implemented in `triageguard/modeling/` and orchestrated by `scripts/train_evaluate.py`. The document classifier compares word TF-IDF against word-plus-character TF-IDF. Routing compares both text models, visible-fact rules, and a hybrid; the hybrid won on validation. PII and field rules remain the selected baselines because they meet the golden targets. Probabilities are temperature-scaled on validation only. The fitted bundle is saved to `artifacts/models/baseline_bundle.joblib` and is reproducible from the locked environment.
 
-## M4 to M6 (planned)
+Every model is trained only on Synthea + Faker train data and scored on golden, hard and real OCR for both corpora. The machine-readable experiment record includes dataset SHA-256 hashes, selected candidates, temperatures, per-class scores and environment versions.
 
-- **M4:** error analysis, OCR robustness (simulated and real), threshold sweep (automation vs error), calibration (ECE), choose the confidence gate.
+## M4: Baseline outcome evaluation (done 2026-11-23)
+
+On the frozen Synthea golden set, all nine project targets pass: PII leak recall 0.9841, document macro-F1 1.0000, field F1 0.9684, high-value recall 0.9744, suspicious recall 0.9400, document ECE 0.0002, routing ECE 0.0396, p95 CPU latency about 3 ms, and 0.8115 auto-triage coverage at 0.9853 joint classification/routing accuracy.
+
+The validation-selected confidence threshold is 0.615. Hard and real-OCR results are lower, especially field extraction and routing, and cross-source field/routing transfer is weak. These are explicit model findings rather than hidden failures; exact figures and limitations are in `model_evaluation.md` and `reports/model_results.json`. A real insurer-text sanity check remains a prerequisite for any production claim.
+
+## M5 to M6 (planned)
+
 - **M5:** FastAPI + Docker, `/triage` and `/health`, latency measurement, model registry, fallbacks, monitoring plan.
 - **M6:** technical report, live demo, business presentation, replace the 3-minute-per-document assumption with a sourced figure.
 
@@ -132,3 +139,4 @@ Every model is trained on Synthea + Faker train data and scored on golden, hard 
 | 2026-10-17 | Synthea + Faker corpus, real Tesseract OCR sets, realism comparison |
 | 2026-10-17 | Synthea + Faker chosen as main dataset; ARCHITECTURE.md and PLAN.md added |
 | 2026-10-18 | Synthea re-run (pinned), main dataset rebalanced to v2, names and contacts fixed, test sets frozen, EDA for both corpora |
+| 2026-11-23 | Python 3.13 sandbox, M3 models, M4 frozen/hard/OCR/control evaluation, calibrated confidence gate and saved model bundle |
