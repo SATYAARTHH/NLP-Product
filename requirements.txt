@@ -3,3 +3,8 @@ faker==40.43.0
 pillow==13.0.0
 joblib==1.6.0
 scikit-learn==1.9.1
+fastapi==0.115.12
+uvicorn==0.34.2
+python-multipart==0.0.20
+pypdf==5.4.0
+python-docx==1.1.2

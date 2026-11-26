@@ -1272,8 +1272,8 @@
     }
   },
   "latency": {
-    "p50_ms": 1.94,
-    "p95_ms": 2.74
+    "p50_ms": 2.02,
+    "p95_ms": 2.84
   },
   "target_status": {
     "PII leak recall": {
@@ -1313,7 +1313,7 @@
     },
     "p95 CPU latency": {
       "target": "< 2000 ms",
-      "observed": 2.74,
+      "observed": 2.84,
       "pass": true
     },
     "Auto-triage coverage": {

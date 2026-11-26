@@ -1,6 +1,6 @@
 # TriageGuard architecture
 
-This document describes how TriageGuard is put together: the modeled runtime stages built in M3-M4, the service planned for M5, and the data pipeline built in M2. For the history of decisions and what was redone, see [PLAN.md](PLAN.md).
+This document describes how TriageGuard is put together: the runtime stages built in M3-M4, the minimal M5 service, and the data pipeline built in M2. For the history of decisions and what was redone, see [PLAN.md](PLAN.md).
 
 ## 1. What the system does
 
@@ -17,7 +17,7 @@ output: {
 }
 ```
 
-## 2. Runtime architecture (M3-M4 modeled; M5 service planned)
+## 2. Runtime architecture (M3-M5 local prototype)
 
 ```mermaid
 flowchart TD
@@ -44,16 +44,16 @@ flowchart TD
 
 | Component | Responsibility | Baseline | Stronger model | Built? |
 |---|---|---|---|---|
-| Intake adapter | Turn any input into plain text | Read text or PDF text layer | Tesseract OCR for images | OCR path exists as a test-set script (`scripts/make_scans.py`) |
+| Intake adapter | Turn any input into plain text | Read UTF-8 text, DOCX, or PDF text layer | Tesseract OCR for images | Simple upload adapter in `triageguard/api.py`; image-only PDFs return an error |
 | Cleaning | Normalise characters without changing offsets | `triageguard/data/clean.py` | | Yes |
 | PII redaction | Find and mask Tier 1 identifiers | Context and format rules | Token-level NER remains an OCR-hardening option | Yes, baseline |
 | Document type | Classify into 6 types with probability | TF-IDF + logistic regression | Character features evaluated; word model selected on validation | Yes |
 | Field extraction | Pull type-specific fields | Anchors + training-only value lexicon | Token tagger remains an OCR-hardening option | Yes, baseline |
 | Routing | routine / high_value / suspicious | Rules over extracted fields | Hybrid visible-fact rules + TF-IDF classifier | Yes |
 | Confidence gate | Send unsure cases to humans | Validation-selected joint-confidence threshold | Temperature-scaled probabilities, ECE with 15 bins | Yes |
-| Service | API around the pipeline | FastAPI + Docker, `/triage`, `/health` | | M5 |
-| Model registry | Versioned models, champion/challenger | MLflow (planned in M1) | | M5 |
-| Monitoring | Quality and drift without raw PII | Structured logs of safe outputs | Dashboards, override rate | M5 |
+| Service | API around the pipeline | FastAPI + Docker, `/triage`, `/health`, browser upload UI | | Minimal M5 built |
+| Model registry | Versioned models, champion/challenger | Version metadata and configurable local bundle path | MLflow | Minimal M5 bundle switch built |
+| Monitoring | Quality and drift without raw PII | Logs of type, route, review status, and latency | Dashboards, override rate | Minimal M5 logs built |
 
 ### Privacy boundary (two tiers)
 
@@ -141,7 +141,8 @@ triageguard/
     classifiers.py       TF-IDF models and temperature scaling
     routing.py           visible-fact rules and hybrid routing
     metrics.py           fixed PII, field, classification, ECE and gate metrics
-  (M5+) api/
+  api.py                M5 upload API and browser UI
+  static/index.html     M5 upload frontend
 scripts/
   generate_corpus.py, generate_synthea_corpus.py, make_scans.py, eda.py, compare_realism.py,
   train_evaluate.py

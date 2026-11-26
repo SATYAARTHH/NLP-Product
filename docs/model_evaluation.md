@@ -36,7 +36,7 @@ Golden routing recall has limited support: high-value uses 39 documents with a 9
 | Suspicious route recall | >= 0.90 | 0.94 | PASS |
 | Document ECE | <= 0.05 | 0.0002 | PASS |
 | Routing ECE | <= 0.05 | 0.0396 | PASS |
-| p95 CPU latency | < 2000 ms | 2.74 | PASS |
+| p95 CPU latency | < 2000 ms | 2.84 | PASS |
 | Auto-triage coverage | >= 0.70 | 0.8115 | PASS |
 
 ## Confidence gate

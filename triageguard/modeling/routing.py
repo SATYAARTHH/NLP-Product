@@ -69,7 +69,7 @@ class RoutingRules:
         allowed = self.compatible.get(diagnosis, set())
         return any((diagnosis, procedure) in self.incompatible and procedure not in allowed for procedure in procedures if procedure)
 
-    def predict_one(self, text: str, doc_type: str | None = None) -> tuple[str, float]:
+    def detect_signals(self, text: str, doc_type: str | None = None) -> list[str]:
         if doc_type is None:
             doc_type = self.document_model.predict([text])[0]
         extracted = self.fields.predict_one(text, doc_type)
@@ -81,7 +81,22 @@ class RoutingRules:
         impossible = bool(
             admission and discharge and datetime.fromisoformat(discharge) < datetime.fromisoformat(admission)
         ) or bool(dob and any(value < dob for value in parsed_dates if value != dob))
-        if self._duplicate(text) or impossible or self._mismatch(text):
+        signals = []
+        if self._duplicate(text):
+            signals.append("duplicate_billing")
+        if impossible:
+            signals.append("impossible_dates")
+        if self._mismatch(text):
+            signals.append("procedure_mismatch")
+        return signals
+
+    def predict_one(self, text: str, doc_type: str | None = None) -> tuple[str, float]:
+        if doc_type is None:
+            doc_type = self.document_model.predict([text])[0]
+        extracted = self.fields.predict_one(text, doc_type)
+        admission = extracted.get("admission_date")
+        discharge = extracted.get("discharge_date")
+        if self.detect_signals(text, doc_type):
             return "suspicious", 0.98
 
         amount = extracted.get("claimed_amount") or extracted.get("total_billed") or extracted.get("estimated_cost")

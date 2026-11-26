@@ -12,8 +12,8 @@ This is the running record of the project: what each phase is for, what was done
 | M2 Data preparation | Corpus, data card, EDA, splits, privacy notes | Done; main dataset is Synthea + Faker v2 (rebalanced 2026-10-18) |
 | M3 Baselines and models | Baselines for every stage, candidates and reproducible experiment log | Done (2026-11-23) |
 | M4 Evaluation and optimisation | Frozen tests, OCR/control robustness, thresholds and calibration | Done for baseline (2026-11-23); robustness findings recorded |
-| M5 Deployment prototype | FastAPI + Docker, monitoring, fallbacks | Next |
-| M6 Final delivery | Report, live demo, presentation, viva | Planned |
+| M5 Deployment prototype | FastAPI upload UI/API, Dockerfile, safe logging, review fallback | Minimal local prototype done (2026-11-26) |
+| M6 Final delivery | Concise report, live-demo instructions, presentation outline | Minimal handoff done (2026-11-26) |
 
 ## M1: Problem definition
 
@@ -126,10 +126,10 @@ On the frozen Synthea golden set, all nine project targets pass: PII leak recall
 
 The validation-selected confidence threshold is 0.615. Hard and real-OCR results are lower, especially field extraction and routing, and cross-source field/routing transfer is weak. These are explicit model findings rather than hidden failures; exact figures and limitations are in `model_evaluation.md` and `reports/model_results.json`. A real insurer-text sanity check remains a prerequisite for any production claim.
 
-## M5 to M6 (planned)
+## M5 to M6 (minimal local delivery)
 
-- **M5:** FastAPI + Docker, `/triage` and `/health`, latency measurement, model registry, fallbacks, monitoring plan.
-- **M6:** technical report, live demo, business presentation, replace the 3-minute-per-document assumption with a sourced figure.
+- **M5:** `triageguard/api.py` adds text/DOCX/text-layer-PDF upload, `/triage`, `/health`, browser UI, request latency, version metadata, privacy-safe summary logging, and a confidence-based human-review result. `Dockerfile` packages the local trained bundle. The model-path setting provides a simple bundle switch; MLflow and OCR are outside this lean prototype.
+- **M6:** [M5/M6 demo guide](M5_M6_DEMO.md) contains the technical summary, local run and upload commands, and a four-slide presentation outline. The three-minute manual-processing assumption remains unverified; it is excluded from measured savings claims.
 
 ## Change log
 
@@ -140,3 +140,4 @@ The validation-selected confidence threshold is 0.615. Hard and real-OCR results
 | 2026-10-17 | Synthea + Faker chosen as main dataset; ARCHITECTURE.md and PLAN.md added |
 | 2026-10-18 | Synthea re-run (pinned), main dataset rebalanced to v2, names and contacts fixed, test sets frozen, EDA for both corpora |
 | 2026-11-23 | Python 3.13 sandbox, M3 models, M4 frozen/hard/OCR/control evaluation, calibrated confidence gate and saved model bundle |
+| 2026-11-26 | M5 upload service and browser UI; M6 concise delivery and reproducible live-demo guide |

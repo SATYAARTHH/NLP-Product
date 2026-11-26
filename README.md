@@ -22,8 +22,8 @@ The full problem definition and business case is in [docs/M1_Problem_Definition_
 | M2 Data preparation | Synthetic corpora, data card, EDA, cleaning, splits, privacy notes, realism comparison | Done. Main dataset is Synthea + Faker v2 |
 | M3 Baselines and models | PII/field rules, TF-IDF models, hybrid routing, saved model bundle | Done; reproducible training in `scripts/train_evaluate.py` |
 | M4 Evaluation | Golden/hard/OCR/control evaluation, calibration and confidence gate | Done for the baseline; robustness gaps are recorded in `docs/model_evaluation.md` |
-| M5 Deployment prototype | FastAPI service, Docker, monitoring, fallbacks | Next |
-| M6 Final delivery | Report, live demo, presentation | Planned |
+| M5 Deployment prototype | FastAPI upload service, Docker, safe summary logging, review fallback | Minimal local prototype |
+| M6 Final delivery | Local demo guide, concise technical report and presentation outline | Minimal handoff |
 
 ## The corpora (M2)
 
@@ -57,6 +57,22 @@ Splits are by patient, and one layout per document type appears only in `test_ha
 * [Decision log](docs/decision_log.md): M1 review fixes and every M2 change to the plan, including the switch to Synthea + Faker
 
 ## Quick start
+
+### Run the document upload demo (M5/M6)
+
+From this repository root, with Python 3.13 and `uv` installed:
+
+```bash
+uv venv --python 3.13 .venv
+uv pip install --python .venv/bin/python -r requirements-lock.txt
+# Only if artifacts/models/baseline_bundle.joblib is missing:
+.venv/bin/python scripts/train_evaluate.py
+.venv/bin/python -m uvicorn triageguard.api:app --host 127.0.0.1 --port 8000
+```
+
+Open <http://127.0.0.1:8000>, choose one `.txt`, `.docx`, or text-layer `.pdf`, and click **Run triage**. See [the M5/M6 demo guide](docs/M5_M6_DEMO.md) for a reproducible sample upload, API commands, Docker option, and the prototype's scope.
+
+The saved model bundle is generated locally and is excluded from Git. Uploads are processed in memory; the service logs only type, route, review status, and latency.
 
 M1 and M2 need only Python 3.10+ and no third-party packages.
 
